@@ -25,7 +25,7 @@ IMAGE_SIZE = 128 # rows/cols
 IMAGE_CHANNELS = 3
 
 
-training_data = np.load('uploads/art_gan/Abstract_Expressionism.npy')
+training_data = np.load('/spell/ART_GAN/Abstract_Expressionism.npy')
 
 
 def build_discriminator(image_shape):
