@@ -79,7 +79,7 @@ def build_generator(noise_size, channels):
     model.add(Activation("tanh"))
     input = Input(shape=(noise_size,))
     generated_image = model(input)
-    
+
     return Model(input, generated_image)
 
 def save_images(cnt, noise):
@@ -97,7 +97,7 @@ def save_images(cnt, noise):
             image_array[r:r + IMAGE_SIZE, c:c +
                         IMAGE_SIZE] = generated_images[image_count] * 255
             image_count += 1
-            
+
     output_path = 'output'
     if not os.path.exists(output_path):
         os.makedirs(output_path)
@@ -124,33 +124,16 @@ cnt = 1
 for epoch in range(EPOCHS):
  idx = np.random.randint(0, training_data.shape[0], BATCH_SIZE)
  x_real = training_data[idx]
- 
+
  noise= np.random.normal(0, 1, (BATCH_SIZE, NOISE_SIZE))
  x_fake = generator.predict(noise)
- 
+
  discriminator_metric_real = discriminator.train_on_batch(x_real, y_real)
-discriminator_metric_generated = discriminator.train_on_batch(
- x_fake, y_fake)
- 
-discriminator_metric = 0.5 * np.add(discriminator_metric_real, discriminator_metric_generated)
-generator_metric = combined.train_on_batch(noise, y_real)
-if epoch % SAVE_FREQ == 0:
-   save_images(cnt, fixed_noise)
-   cnt += 1
- 
-   print(f"{epoch} epoch, Discriminator accuracy: {100*  discriminator_metric[1]}, Generator accuracy: {100 * generator_metric[1]}")
-         
+ discriminator_metric_generated = discriminator.train_on_batch(x_fake, y_fake)
 
-discriminator_metric_real = discriminator.train_on_batch(x_real, y_real)
-discriminator_metric_generated = discriminator.train_on_batch(x_fake, y_fake)
-
-discriminator_metric = 0.5 * np.add(discriminator_metric_real, discriminator_metric_generated)
-
-if epoch % SAVE_FREQ == 0:
- save_images(cnt, fixed_noise)
- cnt += 1
- 
-print(f"{epoch} epoch, Discriminator accuracy: {100* discriminator_metric[1]}, Generator accuracy: {100 * generator_metric[1]}")
-
-
-
+ discriminator_metric = 0.5 * np.add(discriminator_metric_real, discriminator_metric_generated)
+ generator_metric = combined.train_on_batch(noise, y_real)
+ if epoch % SAVE_FREQ == 0:
+     save_images(cnt, fixed_noise)
+     cnt += 1
+     print(f"{epoch} epoch, Discriminator accuracy: {100*  discriminator_metric[1]}, Generator accuracy: {100 * generator_metric[1]}")
