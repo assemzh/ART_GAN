@@ -25,7 +25,7 @@ IMAGE_SIZE = 128 # rows/cols
 IMAGE_CHANNELS = 3
 
 
-training_data = np.load('/spell/ART_GAN/Abstract_Expressionism.npy')
+training_data = np.load('/spell/CUBISM_GAN/Synthetic_Cubism.npy')
 
 
 def build_discriminator(image_shape):
@@ -59,7 +59,7 @@ def build_discriminator(image_shape):
 
 def build_generator(noise_size, channels):
     model = Sequential()
-    model.add(Dense(4 * 4 * 256, activation="relu",       input_dim=noise_size))
+    model.add(Dense(4 * 4 * 256, activation="relu", input_dim=noise_size))
     model.add(Reshape((4, 4, 256)))
     model.add(UpSampling2D())
     model.add(Conv2D(256, kernel_size=3, padding="same"))
